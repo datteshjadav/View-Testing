@@ -1,0 +1,993 @@
+@{
+    @* Layout = null; *@
+}
+@* @using System.Configuration
+@{
+    var API_URL = System.Configuration.ConfigurationManager.AppSettings["APIBase"];
+    var UI_URL = System.Configuration.ConfigurationManager.AppSettings["UIBase"];
+} *@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!--meta tags-->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <title>TrackerFlow | Audit Tab</title>
+    <!-- favicon -->
+    <!--<link rel="shortcut icon" href="../../App_Themes/Default/images/favicon.ico" type="image/x-icon">-->
+    @* <link href="~/App_Themes/Default/css/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/App_Themes/Default/css/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/App_Themes/Default/css/fonts.css" rel="stylesheet" />
+    <link href="~/App_Themes/Default/css/styleguide.css" rel="stylesheet" />
+    <link href="~/App_Themes/Default/css/casepoint.comfortable.css" rel="stylesheet" />
+    <link href="~/App_Themes/Default/css/kendo.Deeppurple.css" rel="stylesheet" />
+    <!-- css -->
+    <link href="~/App_Themes/Default/css/core-pocket.css" rel="stylesheet" />
+    <link href="~/App_Themes/Default/css/core-pocket-responsive.css" rel="stylesheet" />
+
+    <!-- Additional Scripts -->
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/NewScripts/6.Tab_Audit.js"></script> *@
+
+    <!-- CSS for Audit Form -->
+    
+    <style>
+        fieldset {
+            border: 1px solid #dcdfe5;
+            border-radius: 3px;
+        }
+
+        legend {
+            color: #7e57c2;
+            border-radius: 3px;
+            padding: 8px 16px 8px 16px;
+        }
+
+        .btn-default {
+            background-color: #7e57c2;
+            margin: 23px 0px 0px 15px;
+        }
+    </style>
+</head>
+
+<body>
+    @* <script>
+        var API_URL = "@ConfigurationManager.AppSettings["APIBase"].ToString()";
+        var UI_URL = "@ConfigurationManager.AppSettings["UIBase"].ToString()";
+        var sessionid =@Session["uid"];
+        if (Convert.ToInt32(sessionid) == 0) {
+            @Html.ActionLink("login", "sign");
+        }
+
+    </script> *@
+    <!--Success-->
+    <div class="notification-alert  notification-box success" id="msgSuccess">
+        <div class="pull-left"><i class="icon-check" aria-hidden="true"></i></div>
+        <div class="pull-right text-left" role="alert" aria-label="Success">
+            <h5>Successful</h5>
+            <p id="successMessage">Registration Successful.</p>
+        </div>
+        <a onclick="closenav()" class="close btn-red-circle" aria-label="Close Notification" role="button"><i class="icon-cancel" aria-hidden="true"></i></a>
+    </div>
+    <!--Warning-->
+    <div class="notification-alert notification-box warning" id="msgWarning">
+        <div class="pull-left"><i class="icon-warning" aria-hidden="true"></i></div>
+        <div class="pull-right text-left" role="alert" aria-label="warning">
+            <h5>Warning</h5>
+            <p id="warningMessage"></p>
+        </div>
+        <a href="javascript:void(0)" onclick="closenav()" class="close btn-red-circle" aria-label="Close Notification" role="button"><i class="icon-cancel" aria-hidden="true"></i></a>
+    </div>
+    <!--Error-->
+    <div class="notification-alert notification-box danger" id="msgErrorr">
+        <div class="pull-left"><i class="icon-cancel" aria-hidden="true"></i></div>
+        <div class="pull-right" role="alert" aria-label="danger">
+            <h5>Error</h5>
+            <p id="errorMessage"></p>
+        </div>
+        <a href="javascript:void(0)" onclick="closenav()" class="close btn-red-circle" aria-label="Close Notification" role="button"><i class="icon-cancel" aria-hidden="true"></i></a>
+    </div>
+    <!-- Audit Form Content Starts -->
+    <fieldset class="m-20">
+        <legend class="font-bold fs-16 text-center">Audit Form</legend>
+        <div class="row-container mt-10 mb-10">            
+            <div class="col-width-20">
+                <label for="search_drpdwn">Select Office<span class="text-danger" aria-hidden="true">*</span></label>
+                <select name="search dropdown" id="select_Office"></select>
+                <!-- Validation Text-->
+                <h5 id="officeCheck" style="color: #ff5a5a;"></h5>
+            </div>
+            <div class="col-width-20">
+                <label for="search_drpdwn2">Select Floor<span class="text-danger" aria-hidden="true">*</span></label>
+                <select name="search dropdown" id="select_Floor"></select>
+                <!-- Validation Text-->
+                <h5 id="floorCheck" style="color: #ff5a5a;"></h5>
+            </div>
+            <div class="col-width-20">
+                <label for="search_drpdwn3">Select Area<span class="text-danger" aria-hidden="true">*</span></label>
+                <select name="search dropdown" id="select_Area"></select>
+                <!-- Validation Text-->
+                <h5 id="areaCheck" style="color: #ff5a5a;"></h5>
+            </div>
+            <div class="col-width-20">
+                <label for="datepicker">Date Picker<span class="text-danger" aria-hidden="true">*</span></label>
+                <input id="datepicker" class="form-control" data-toggle="tooltip" 
+                       data-placement="right" title="Please Select Date of Audit" />
+                <!-- Validation Text-->
+                <h5 id="datepickerCheck" style="color: #ff5a5a;"></h5>
+            </div>
+            <div class="col-width-20">
+                <button class="btn btn-default k-button" id="startAudit" onclick="validateData()">Start Audit</button>
+                <button class="btn btn-default k-button" id="submitAudit" onclick="openSubmitAuditPopup();">Submit Audit</button>
+            </div>
+        </div>
+    </fieldset>
+    <!-- Audit Form Content Ends -->
+    <!--Submit Audit Form Starts-->
+    <div id="submitauditpopup" style="display: none;">
+        <div class="row-container">
+            <div class="col-width-100 fs-18 mt-20">
+                <label class="font-medium text-dark">Audit Date : </label>
+                <label id="dateLabel"></label>
+                <br />
+                <label class="font-medium text-dark">Office Name : </label>
+                <label id="officeLabel"></label>
+                <br />
+                <label class="font-medium text-dark">Floor Number : </label>
+                <label id="floorLabel"></label>
+                <br />
+                <label class="font-medium text-dark">Area Name : </label>
+                <label id="areaLabel"></label>
+                
+            </div>
+        </div>
+        <hr />
+        <p class="fs-20 font-medium text-dark p-10">Are you sure you want to submit this audit?</p>
+        <button class="btn btn-primary k-button pull-right mt-5" onclick="submitAudit();">Submit</button>
+        <button class="btn k-button btn-borderd pull-right mt-5 mr-10" onclick="closeSubmitAuditPopup();">Cancel</button>
+    </div>
+    <!--Submit Audit Form End-->
+
+    <div class="mt-container mt-container-fluid h100 pl-20 pr-20">
+        <section id="main_splitter" class="k-spliter h100">
+            <div class="center-pane h100 event-pane-wrapper">
+                <header class="grid-header">
+                    <div class="row-container mb-10">
+                        <!-- Search Bar -->
+                        <div class="col-width-100">
+                            <div class="input-search">
+                                <i class="icon-search" data-ara-title="Search" aria-hidden="true"
+                                   data-role="aratooltipv2"></i>
+                                <input type="text" name="search" class="form-control k-textbox" placeholder="Search here..."
+                                       aria-label="Search" autocomplete="off" id="txtSearchString">
+                            </div>
+                        </div>
+                    </div>
+                </header>
+                <div class="view-wrapper">
+                    <!-- Before -->
+                    <div class="empty-record"><p>There are no records to display.</p></div>
+                    <!-- After -->
+                    <div class="grid-wrapper h100" id="list_view_content">
+                        <div class="form-group ml-5" id="info">
+                            <ul class="checkbox-inline" role="group" aria-labelledby="Inlinecheckbox">
+                                <li class="checkbox-wrap">
+                                    <span class="icon"><i class="icon-info-unfill"></i></span>
+                                    <label>Green highlight indicates asset is newly added after previous audit</label>
+                                </li>
+                                <li class="checkbox-wrap">
+                                    <span class="icon"><i class="icon-info-unfill"></i></span>
+                                    <label>true indicates asset is Missing</label>
+                                </li>
+                                <li class="checkbox-wrap">
+                                    <span class="icon"><i class="icon-info-unfill"></i></span>
+                                    <label>false indicates asset is Exists</label>
+                                </li>
+                            </ul>
+                        </div>
+                        <div id="categoryGrid" class="mb-0"></div>
+                        <footer>
+                            <div id="categoryGrid_pager" class="with-more-option">
+                            </div>
+                        </footer>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- add category window -->
+    <div id="addcategory" style="display: none;">
+        <div class="main-content">
+            <iframe id="myFrame" style="height:100%; width:100%;" tabindex="0" src="@Url.Action("Login", "Dash")"></iframe>
+        </div>
+    </div>
+    <!-- add category window -->
+    <!-- option menu -->
+    <ul id="popup" class="grid-options" style="display: none;">
+        <li class="goto">
+            <span class="text-muted">Go to page</span>
+            <span>
+                <input type="text" id="page_goto" class="form-control" />
+            </span>
+            <span class="text-muted">0</span>
+            <span class="text-muted">pages</span>
+        </li>
+        <li class="rpp">
+            <span class="text-muted">Record per page</span>
+            <select class="k-dropdown" id="pagerDropdown">
+                <option>5</option>
+                <option>10</option>
+                <option>15</option>
+                <option>20</option>
+                <option>50</option>
+                <option>100</option>
+                <option>200</option>
+            </select>
+        </li>
+    </ul>
+    <!-- option menu -->
+    <!-- scripts -->
+    @section Scripts{
+        @* <script src="~/Scripts/Kendo/jquery.min.js"></script>
+        <script src="~/Scripts/Kendo/kendo.all.min.js"></script>
+        <script src="~/Scripts/CLARENT/Other/Custom/Custom.js"></script> *@
+
+        <script id="tmp" type="text/x-kendo-template">
+            <textarea class='k-textbox w100' name="c_assetname" rows="1"></textarea>
+        </script>
+
+        <script>
+            //Scroll to bottom of page js
+            function scrollSmoothToBottom() {
+                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            }
+
+            //function dirtyField(fieldName){
+            //    if(fieldName == false)
+            //    {
+            //        return '<input type="text" class="k-textbox" value="$" />'
+            //    }
+            //}
+
+
+            $(document).ready(function () {
+                $("#multiSelectDropdown").kendoMultiSelect();
+
+                $('#dateLabel').text($('#datepicker').val());
+            });
+
+            function openSubmitAuditPopup() {
+                $("#submitauditpopup").data("kendoWindow").center().open();
+            }
+            function closeSubmitAuditPopup() {
+                $("#submitauditpopup").data("kendoWindow").close();
+            }
+
+            function submitAudit() {
+                ItemInfoManager.SaveItemInfo();
+            }
+            //var ItemInfoManager = {
+            //    SaveItemInfo: function () {
+            //        //$('#categoryGrid').data('kendoGrid').dataSource.read();
+            //        //$('#categoryGrid').data('kendoGrid').refresh();
+            //        var date = $("#datepicker").val();
+            //        //alert(date);    
+            //        var itemObj = new $("#categoryGrid").data("kendoGrid").dataSource.data();
+            //        // var descObj = $("#c_desc").val();
+            //        //var finalObj = itemObj;
+            //        //var temp = { itemObj: itemObj, date: date }
+            //        var jsonParam = "assetlist:" + JSON.stringify(itemObj);
+            //        var serviceUrl = API_URL + "/api/ApiAudit/insert";
+            //        console.log("{" + jsonParam + "}");
+            //        ItemInfoManager.PostJson(serviceUrl, jsonParam, onSuccess, onFailed);
+            //        function onSuccess(jsonData) {
+            //            alert("hhh");
+            //                document.getElementById("successMessage").innerHTML = "Audit Performed Succesfully";
+            //                document.getElementById("msgSuccess").style.display = "block";
+            //                setTimeout(function () {
+            //                    $("#msgSuccess").fadeOut(1000)
+            //                }, 3000);
+            //                window.location.reload();
+            //            }
+            //        function onFailed(error) {
+            //            document.getElementById("warningMessage").innerHTML = "There is some error";
+            //            document.getElementById("msgWarning").style.display = "block";
+            //            setTimeout(function () {
+            //                $("#msgWarning").fadeOut(1000)
+            //            }, 3000);
+            //        };
+            //    },
+            //    PostJson: function (serviceUrl, jsonParams, successCallback, errorCallback) {
+            //        jQuery.ajax({
+            //            url: serviceUrl,
+            //            async: true,
+            //            type: "POST",
+            //            data: "{" + jsonParams + "}",
+            //            dataType: "json",
+            //            contentType: "application/json; charset=utf-8",
+            //            success: successCallback,
+            //            error: errorCallback
+            //        });
+            //    }
+
+            //}
+
+
+
+            var ItemInfoManager = {	
+                SaveItemInfo: function () {	
+                    //$('#categoryGrid').data('kendoGrid').dataSource.read();	
+                    //$('#categoryGrid').data('kendoGrid').refresh();	
+                    var date = $("#datepicker").val();	
+                    var itemObj = new $("#categoryGrid").data("kendoGrid").dataSource.data();	
+                    // var descObj = $("#c_desc").val();	
+                    //var finalObj = itemObj;	
+                    var jsonParam = "assetlist:" + JSON.stringify(itemObj);	
+                    var serviceUrl = API_URL + "/api/ApiAudit/insert";	
+                    console.log("{" + jsonParam + "}");	
+                    ItemInfoManager.PostJson(serviceUrl, jsonParam, onSuccess, onFailed);	
+                    function onSuccess(jsonData) {	
+                        document.getElementById("successMessage").innerHTML = "Audit Performed Succesfully";	
+                        document.getElementById("msgSuccess").style.display = "block";	
+                        setTimeout(function () {	
+                            $("#msgSuccess").fadeOut(1000)	
+                        }, 3000);	
+                        window.location.reload();	
+                    }	
+                    function onFailed(error) {	
+                        document.getElementById("warningMessage").innerHTML = "There is some error";	
+                        document.getElementById("msgWarning").style.display = "block";	
+                        setTimeout(function () {	
+                            $("#msgWarning").fadeOut(1000)	
+                        }, 3000);	
+                    };	
+                },	
+                PostJson: function (serviceUrl, jsonParams, successCallback, errorCallback) {	
+                    jQuery.ajax({	
+                        url: serviceUrl,	
+                        async: true,	
+                        type: "POST",	
+                        data: "{" + jsonParams + "}",	
+                        dataType: "json",	
+                        contentType: "application/json; charset=utf-8",	
+                        success: successCallback,	
+                        error: errorCallback	
+                    });	
+                }	
+
+            }
+            $("#submitauditpopup").kendoWindow({
+                width: '380px',
+                height: '310px',
+                visible: false,
+                draggable: false,
+                resizable: false,
+                title: "Audit Summary",
+                actions: [
+                    "Close"
+                ],
+                modal: true,
+
+            }).data("kendoWindow");
+
+            $("#datepicker").on("change", function () {
+                $('#dateLabel').text($(this).val());
+            });
+            $("#select_Office").on("change", function () {
+                var office = $(this).find(":selected").text();
+                $("#officeLabel").text(office);
+            });
+            $("#select_Floor").on("change", function () {
+                var floor = $(this).find(":selected").text();
+                $("#floorLabel").text(floor);
+            });
+            $("#select_Area").on("change", function () {
+                var area = $(this).find(":selected").text();
+                $("#areaLabel").text(area);
+            });
+        </script>
+
+        <script>
+            $(document).ready(function () {
+
+                // hide userprofile
+                $(document).click(function () {
+                    window.top.$('body').find('.userprofile-menu').removeClass('open');
+                    window.top.$('body').find('.userprofile').removeClass('active open');
+                });
+
+                // common select dropdown
+                $("select:not([multiple])").kendoDropDownList();
+
+                ////Start Audit Onclick js
+                //$("#startAudit").click(function () {
+                //    //$("#categoryGrid").data("kendoGrid").dataSource.read();
+                //    var dbs = $("#categoryGrid").kendoGrid({
+                //        dataSource: {
+                //            transport: {
+                //                read: {
+                //                    dataType: "json",
+                //                    url: API_URL + "/api/ApiAudit/GetAsset/" + $("#select_Area").val(),
+                //                }
+                //            }
+                //        },
+                //        cascadeFrom: "select_Area",
+                //        autoBind: true,
+                //        resizable: false,
+                //        sortable: true,
+                //        pageable: false,
+                //        persistSelection: true,
+                //        //Default Selected Function
+                //        dataBound: function (e) {
+                //            var grid = this;
+                //            var rows = grid.items();
+                //            $(rows).each(function (e) {
+                //                var row = this;
+                //                var dataItem = grid.dataItem(row);
+                //                if (dataItem.c_isavailable == 1) {
+                //                    grid.select(row);
+                //                }
+                //            });
+                //        },
+                //        // change: onChange,
+                //        scrollable: false,
+                //        //dataBound: onDataBound,
+                //        columns: [{
+                //            //selectable: true,
+                //            //width: "40px",
+                //            //field: "c_ismissing",
+                //            //title: "Missing"
+                //        },
+                //        {
+                //            field: "c_assetname",
+                //            title: "Asset Name",
+                //            width: 400,
+                //            editable: false
+                //        },
+                //        {
+                //            field: "c_uniqueid",
+                //            title: "Unique ID",
+                //            width: 400,
+                //            editable: false
+                //        },
+                //        {
+                //            selectable: true,
+                //            //field: "c_ismissing",
+                //            //field: "c_ismissing", title: "Missing Records",
+                //            //template: "#if(c_ismissing == true) {#<div><input type='checkbox' onclick='onChange(this)' id='target' ></div>#}if(c_ismissing == false) {#<div><input type='checkbox' onclick='onChange(this)' id='target' checked></div>#}if(c_ismissing ==null) {#<div><input onclick='onChange(this)' type='checkbox' id='target'></div>#}#"
+                //        },
+                //        {
+                //            //template: "<div class='form-group'><input type='text' class='k-textbox' id='c_desc' data-bind='value: c_desc'></div>",
+                //            //template: "<div class='form-group'><textarea type='text' class='k-textbox w100' rows='1' id='c_desc' data-bind='value: c_desc' ></textarea></div>",
+                //            field: "c_desc",
+                //            width: 500,
+                //            //template:"<input type='text' />",
+                //            //editable: true,
+                //            title: "Notes",
+                //        },
+
+                //        console.log($("#c_ismissing").val())
+                //        ],
+                //        editable: true,
+                //    });
+                //});
+                //Start Audit Onclick js
+                $("#startAudit").click(function () {
+                    scrollSmoothToBottom();
+                    //Kendo UI
+                    var assetData = new kendo.data.DataSource({
+                        transport: {
+                            read: {
+                                url: API_URL + "/api/ApiAudit/GetAsset/" + $("#select_Area").val(),
+                                dataType: "json"
+                            }
+                        },
+                        error: function (e) {
+                            // Handle data operation error.
+                        // alert("Status: " + e.status + "; Error message: " + e.errorThrown);
+                        },
+                        pageSize: 5,
+                        schema: {
+                            model: {
+                                id: "c_uniqueid",
+                                fields: {
+                                    c_assetname: { type: "string", editable: false },
+                                    c_uniqueid: { type: "string", editable: false },
+                                    c_date: { type: "string", editable: false },
+                                    c_ismissing: { type:"boolean"}
+                                }
+                            }
+                        }
+                    });
+                    $("#categoryGrid_pager").kendoPager({
+                        dataSource: assetData,
+                    });
+                    assetData.read();
+
+                    var _roleDataSource = new kendo.data.DataSource({
+                        data: [{
+                            id: 1,
+                            title: "true"
+                        },
+                        {
+                            id: 2,
+                            title: "false"
+                        },
+                        ]
+                    });
+
+
+
+                    //alert(date);
+                    var auditgrid = $("#categoryGrid").kendoGrid({
+                        dataSource: assetData,
+                        resizable: false,
+                        sortable: true,
+                        scrollable: false,
+                        selectable: true,
+                        persistSelection: true,
+                        editable: false,
+                        dataBound: function (e) {
+                            $("table tr td:nth-child(4)").each(function () {
+                                var date = $("#datepicker").val()
+                                //alert(date);
+                                $(this).html(date)
+                            });
+                            $("td:contains('asset')").each(function () {
+                                $(this).parent("tr").css("background-color", "#A6F79F");
+                            });
+                            // }
+                            //var grid = e.sender;
+                            //var items = e.sender.items();
+
+                            //items.each(function(e) {
+                            //    var dataItem = grid.dataItem(this);
+                            //    var ddt = $(this).find('.dropDownTemplate');
+
+                            //    $(ddt).kendoDropDownList({
+                            //        value: dataItem.value,
+                            //        dataSource: ddlDataSource,
+                            //        dataTextField: "displayValue",
+                            //        dataValueField: "c_ismissing",
+                            //        change: onDDLChange
+                            //    });
+                            //});
+                        },
+                        change: onChangeDate,
+                        columns: [{//selectable: true,
+                            field: "c_ismissing",
+                            title: "Status",
+                            //template: dirtyField("c_ismissing"),
+                            //attributes: {class: "k-checkbox"},
+                            //template: '#if (c_ismissing == false) { #<input  type="text" value = "true" #} else{# <input type="text" value = "false" #}#',
+                            editor: function(container, options) {
+                                $("<input data-bind='value:c_ismissing' />")
+                                .attr("id", "ddl_roleTitle")
+                                .appendTo(container)
+                                .kendoDropDownList({
+                                    dataSource: _roleDataSource,
+                                    dataTextField: "title",
+                                    dataValueField: "title",
+                                    template: "<span data-id='${data.id}'>${data.title}</span>",
+                                    select: function(e) {
+                                        var id = e.item.find("span").attr("data-id");
+                                        var grid = $("#categoryGrid").data("kendoGrid");
+                                        var person = grid.dataItem($(e.sender.element).closest("tr"));
+                                        person.roleId = id;
+
+                                        setTimeout(function() {
+                                            $("#log")
+                                                .prepend($("<div/>")
+                                                .text(
+                                                    JSON.stringify(grid.dataSource.data().toJSON())
+                                                ).append("<br/><br/>")
+                                                );
+                                        });
+                                    }
+                                });
+                            }
+                        },
+                        //{
+                        //    title: "Missing",
+                        //    //selectable: true,
+                        //    field: "c_ismissing",
+                        //    //template: "#  if (c_ismissing == true) { #<a onclick='updateStatus($(this))'><img style='width:15px;height:15px;margin-left:15px;' src=" + API_PATH + "/Images/ClarentDefault/send.png></a>#}else{ #<img style='width:15px;height:15px;' src=" + API_PATH + "/Images/ClarentDefault/check-mark.png>#} #",
+                        //    //template: "#if (c_ismissing == true) { #<a onclick='alert(\"asdg\")'><img style='height:30px;width:30px;' src=" + API_URL + "/Images/uncheck-mark.png></a>#} else{ #<a onclick='updateStatus($(this))'><img style='width:30px;height:30px;' src=" + API_URL + "/Images/check-mark.png></a>#} #",
+                        //    width: 100,
+                        //    templete: "#=checkdata(data)#"
+                        //},
+                        {
+                            field: "c_assetname",
+                            title: "Asset Name",
+                            //editor: nonEditor,
+                        },
+                        {
+                            field: "c_uniqueid",
+                            title: "Unique ID",
+                            //editor: nonEditor,
+                        },
+                        {
+                            field: "c_date",
+                            title: "Date",
+                            hidden: true,
+
+                            //template: "<input type=\"text\" class=\"k-textbox datepicker\" name=\"c_date\" title=\"c_date\" value:'sdn'>"
+                            //editor: nonEditor,
+                        },
+                        {
+                            field: "c_desc",
+                            /*template: kendo.template($("#tmp").html()),*/
+                            title: "Notes",
+                        },
+                        {
+                            field: "c_status",
+                            title: "Status",
+                            hidden: true
+                        },
+                        ],
+
+                        //checkdata: function(data)
+                        //{
+                        //    if (data.c_ismissing == false) {
+                        //        //return '<input id="c_ismissing" class="c_ismissing" type="checkbox" checked="checked">';
+                        //        return '<input class="k-checkbox" data-role="c_ismissing" id="c_ismissing" aria-label="Deselect row" aria-checked="true" type="checkbox">'
+                        //    }
+                        //    else
+                        //    {
+                        //        return '<input id="c_ismissing" class="c_ismissing" type="checkbox">';
+                        //    }
+                        //},
+                        editable: true,
+                    });
+                }).data("kendoGrid");
+                //$("#categoryGrid .k-grid-content").on("change", "input.chkbx", function(e) {
+                //    var grid = $("#categoryGrid").data("kendoGrid"),
+                //        dataItem = grid.dataItem($(e.target).closest("tr"));
+
+                //    dataItem.set("c_ismissing", this.checked);
+                //});
+                //function onDDLChange(e) {
+                //    var element = e.sender.element;
+                //    var row = element.closest("tr");
+                //    var grid = $("#categoryGrid").data("kendoGrid");
+                //    var dataItem = grid.dataItem(row);
+
+                //    dataItem.set("c_ismissing", e.sender.value());
+                //};
+
+
+                //*************************************************
+                //Function that changes the image in the audit grid
+                //*************************************************
+                function updateStatus(e) {
+                // alert("asdg");
+                    var grid = $("#categoryGrid").data("kendoGrid");
+                    var dataSource = grid.dataSource;
+                    var rows = e.select().closest("tr");
+                    var data = grid.dataItem(rows);
+                    var allData = [];
+                    allData.push(data);
+                    var settings = {
+                        "url": API_URL + "/api/ApiAudit/updateStatus",
+                        "method": "POST",
+                        "timeout": 0,
+                        "headers": {
+                            "Content-Type": "application/json"
+                        },
+                        "data": JSON.stringify(allData),
+                    };
+                    $.ajax(settings).done(function (response) {
+                        if (response.Failed > 0) {
+                            document.getElementById("warningMessage").innerHTML = "Success : " + response.SuccessMember + "<br>Fail : " + response.Failed + "<br>    " + response.FailMembers.join(',');
+                            document.getElementById("msgWarning").style.display = "block";
+                            setTimeout(function () {
+                                $("#msgWarning").fadeOut(5000)
+                            }, 000);
+                            setTimeout(function () {
+                            }, 2000);
+                            $('#CandidateGrid').data('kendoGrid').clearSelection();
+                            SetCandidateGrid();
+                            //LoadCandidateGrid();
+                        }
+                        else if (response.SuccessMember > 0) {
+                            document.getElementById("successMessage").innerHTML = "Remainder Sent Successfully!<br>Success :  " + response.SuccessMember;
+                            document.getElementById("msgSuccess").style.display = "block";
+                            setTimeout(function () {
+                                $("#msgSuccess").fadeOut(1000)
+                            }, 2000);
+                            setTimeout(function () {
+                            }, 2000);
+                            $('#CandidateGrid').data('kendoGrid').clearSelection();
+                            //SetCandidateGrid();
+                            //LoadCandidateGrid();
+                        }
+
+                    });
+                }
+
+                //});
+                //function onDataBound() {
+                //    if (!$("#categoryGrid tbody input:checkbox").prop("checked")) {
+                //        $("#categoryGrid tbody input:checkbox").trigger("click");
+                //    }
+                //}
+                //function onChange(arg) {
+                //    kendoConsole.log("The selected product ids are: [" + this.selectedKeyNames().join(", ") + "]");
+                //}
+
+                //$("#submitAudit").click(function () {
+                //$("#categoryGrid")
+                //$('#submitAudit').click(function () {
+                //    ItemInfoManager.SaveItemInfo();
+                //    //sendauditntf();
+                //    //$("#categoryGrid").kendoGrid({
+                //    //    dataSource: $("#categoryGrid").data("kendoGrid").dataSource.data(),
+                //    //    pageable: true
+                //    //});
+                //});
+                //function sendauditntf() {
+                //     var settings = {
+                //        "url": API_URL+"/api/DashboardCRUD/",
+                //         "method": "POST",
+                //         "timeout": 0,
+                //         "data": JSON.stringify(sessionid),
+                //    };
+                //    $.ajax(settings).done(function (response) {
+                //        console.log("Success");
+                //    });
+                //}
+                //var ItemInfoManager = {
+                //    SaveItemInfo: function () {
+                //        //$('#categoryGrid').data('kendoGrid').dataSource.read();
+                //        //$('#categoryGrid').data('kendoGrid').refresh();
+                //        var date = $("#datepicker").val();
+                //        var itemObj = new $("#categoryGrid").data("kendoGrid").dataSource.data();
+                //        // var descObj = $("#c_desc").val();
+                //        //var finalObj = itemObj;
+                //        var jsonParam = "assetlist:" + JSON.stringify(itemObj);
+                //        var serviceUrl = API_URL + "/api/ApiAudit/insert";
+                //        console.log("{" + jsonParam + "}");
+                //        ItemInfoManager.PostJson(serviceUrl, jsonParam, onSuccess, onFailed);
+                //        function onSuccess(jsonData) {
+                //            if (jsonData == "Success") {
+                //                document.getElementById("successMessage").innerHTML = "Audit Performed Succesfully";
+                //                document.getElementById("msgSuccess").style.display = "block";
+                //                setTimeout(function () {
+                //                    $("#msgSuccess").fadeOut(1000)
+                //                }, 3000);
+                //                window.location.reload();
+                //            }
+                //        }
+                //        function onFailed(error) {
+                //            document.getElementById("warningMessage").innerHTML = "There is some error";
+                //            document.getElementById("msgWarning").style.display = "block";
+                //            setTimeout(function () {
+                //                $("#msgWarning").fadeOut(1000)
+                //            }, 3000);
+                //        };
+                //    },
+                //    PostJson: function (serviceUrl, jsonParams, successCallback, errorCallback) {
+                //        jQuery.ajax({
+                //            url: serviceUrl,
+                //            async: true,
+                //            type: "POST",
+                //            data: "{" + jsonParams + "}",
+                //            dataType: "json",
+                //            contentType: "application/json; charset=utf-8",
+                //            success: successCallback,
+                //            error: errorCallback
+                //        });
+                //    }
+                //}    
+
+                //bind the click event to the checkbox
+                //$('#testAudit').click(function () {
+                //     //ItemInfoManager.SaveItemInfo();
+                //     ntfcheck();
+                //     //$("#categoryGrid").kendoGrid({
+                //     //    dataSource: $("#categoryGrid").data("kendoGrid").dataSource.data(),
+                //     //    pageable: true
+                //     //});
+                // });
+                //function ntfcheck() {
+                //    var settings = {
+                //        "url": API_URL + "/api/DashboardCRUD/",
+                //        "method": "GET",
+                //        "timeout": 0,
+                //        "data": JSON.stringify(sessionid),
+                //    };
+                //    $.ajax(settings).done(function (response) {
+                //        console.log(response);
+                //    });
+                //}
+                //function SendEmail() {
+                //    console.log();
+                //    $.ajax({
+                //        async: true,
+                //        type: 'POST',
+                //        url: API_URL + '/api/Register/SendEmail',
+                //        data: JSON.stringify(UserClass),
+                //        datatype: 'JSON',
+                //        contentType: 'application/json; charset=utf-8',
+
+                //        success: function (response) {
+                //            //alert(response);
+                //        },
+                //        failure: function (response) {
+                //            //alert(response.responseText);
+                //        },
+                //        error: function (response) {
+                //            //alert(response.responseText);
+                //        }
+                //    });
+                //}
+
+
+                // pager
+                //var dataSource = new kendo.data.DataSource({
+                //    data: [
+                //        { productName: "Tea", category: "Beverages" },
+                //        { productName: "Coffee", category: "Beverages" },
+                //        { productName: "Ham", category: "Food" },
+                //        { productName: "Bread", category: "Food" }
+                //    ],
+                //    pageSize: 2
+                //});
+                //$("#categoryGrid_pager").kendoPager({
+                //    dataSource: dataSource,
+                //});
+                //dataSource.read();
+                //$("#categoryGrid_pager")
+                //    .append("<div class='more-oprion'><span class='separator'></span><a href='javascript:void(0)' id='moreOption' class='text-muted btn-default-hover'><i class='icon-option'></i></a></div>");
+                //Contextmenu popover left click for grid pager
+                var popup = $("#popup").kendoPopup({
+                    animation: false,
+                    anchor: $("#moreOption"),
+                    origin: "top right",
+                    position: "bottom right",
+                    collision: "fit",
+                }).data("kendoPopup");
+                $("#moreOption").click(function () {
+                    $("#popup").data("kendoPopup").open()
+                });
+                $("#pagerDropdown").kendoDropDownList({
+                    popup: {
+                        appendTo: 'body'
+                    }
+                });
+                $("#addcategory").kendoWindow({
+                    animation: false,
+                    width: '900px',
+                    height: '480px',
+                    visible: false,
+                    draggable: false,
+                    resizable: false,
+                    title: "Add Express",
+                    actions: [
+                        "Close"
+                    ],
+                    modal: true,
+
+                }).data("kendoWindow");
+                // ***************************************
+                // Dropdown JS
+                // ***************************************
+                $("#select_Office").kendoDropDownList({
+                    dataTextField: "c_ofcname",
+                    dataValueField: "c_ofcid",
+                    optionLabel: "Select Office",
+                    change: onChangeOffice,
+                    dataSource: {
+                        transport: {
+                            read: {
+                                dataType: "json",
+                                url: API_URL + "/api/ApiAudit/GetOffice",
+                            }
+                        }
+                    }
+                });
+
+                $("#select_Floor").data("kendoDropDownList")
+                function onChangeOffice(e) {
+                    e.preventDefault();
+                    $("#select_Floor").kendoDropDownList({
+                        //enable: true,
+                        cascadeFrom: "select_Office",
+                        dataTextField: "c_floornum",
+                        dataValueField: "c_floorid",
+                        optionLabel: "Select Floor",
+                        change: onChangeFloor,
+                        dataSource: {
+                            transport: {
+                                read: {
+                                    dataType: "json",
+                                    url: API_URL + "/api/ApiAudit/GetFloor/" + $("#select_Office").val(),
+                                }
+                            }
+                        }
+                    });
+                    var dropdownlist = $("#select_Floor").data("kendoDropDownList")
+                    dropdownlist.enable();
+                };
+
+                function onChangeFloor(e) {
+                    e.preventDefault();
+                    $("#select_Area").kendoDropDownList({
+                        cascadeFrom: "select_Floor",
+                        dataTextField: "c_areaname",
+                        dataValueField: "c_aid",
+                        optionLabel: "Select Area",
+                        change: onChangeDate,
+                        dataSource: {
+                            transport: {
+                                read: {
+                                    dataType: "json",
+                                    url: API_URL + "/api/ApiAudit/GetArea/" + $("#select_Floor").val(),
+                                }
+                            }
+                        }
+                    });
+                    var dropdownlist = $("#select_Area").data("kendoDropDownList")
+                    dropdownlist.enable();
+                };
+
+                function onChangeDate(e) {
+                    e.preventDefault();
+                    //alert($("#select_Area").val());
+                    $.ajax({
+                        async: true,
+                        type: 'GET',
+                        url: API_URL + '/api/ApiAudit/Get_date?id=' + $("#select_Area").val(),
+                        //data: JSON.stringify($("#select_Area").val()),
+                        datatype: 'JSON',
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (response) {
+                            // alert("hello");
+                            // alert(response);
+                            lockDate(response);
+                        },
+                        failure: function (response) {
+                            //alert(response.responseText);
+                        },
+                        error: function (response) {
+                            //alert(response.responseText);
+                        }
+                    });
+                }
+
+
+
+                function lockDate(ldate) {
+                    // alert("lockdate");
+                    // alert(ldate);
+                    var auditdate = new Date(ldate);
+                    var presentDate = new Date();
+                    //alert(presentDate);
+                    $("#datepicker").kendoDatePicker({
+                        
+                        value: presentDate,
+                        disableDates: function (date) {
+                            if (date >= presentDate) {
+                                return true;
+                            }
+                            else if (date <= auditdate) {
+                                return true;
+                            }
+                            else {
+                                    return false;
+                            }
+                        }
+                    });
+                }
+                function openAddEventPopup() {
+                    $("#addcategory").data("kendoWindow").center().open();
+                }
+            });
+        </script>
+    }
+</body>
+</html> 

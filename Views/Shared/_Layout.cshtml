@@ -3,13 +3,25 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - View_Testing</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    @* <title>@ViewData["Title"] - View_Testing</title> *@
+    @* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/View_Testing.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/View_Testing.styles.css" asp-append-version="true" /> *@
+    <link href="~/App_Themes/Default/css/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/App_Themes/Default/css/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/App_Themes/Default/css/fonts.css" rel="stylesheet" />
+    <link href="~/App_Themes/Default/css/styleguide.css" rel="stylesheet" />
+    <link href="~/App_Themes/Default/css/casepoint.comfortable.css" rel="stylesheet" />
+    <link href="~/App_Themes/Default/css/kendo.Deeppurple.css" rel="stylesheet" />
+    <!-- css -->
+    <link href="~/App_Themes/Default/css/core-pocket.css" rel="stylesheet" />
+    <link href="~/App_Themes/Default/css/core-pocket-responsive.css" rel="stylesheet" />
+    <!-- Additional Scripts -->
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/NewScripts/6.Tab_Audit.js"></script>
 </head>
 <body>
-    <header>
+    @* <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">View_Testing</a>
@@ -29,21 +41,24 @@
                 </div>
             </div>
         </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+    </header> *@
+    @* <div class="container">
+        <main role="main" class="pb-3"> *@
             @RenderBody()
-        </main>
-    </div>
+        @* </main>
+    </div> *@
 
-    <footer class="border-top footer text-muted">
+    @* <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2024 - View_Testing - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    </footer> *@
+    @* <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script> *@
+    <script src="~/Scripts/Kendo/jquery.min.js"></script>
+    <script src="~/Scripts/Kendo/kendo.all.min.js"></script>
+    <script src="~/Scripts/CLARENT/Other/Custom/Custom.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
