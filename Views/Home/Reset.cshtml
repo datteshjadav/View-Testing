@@ -1,0 +1,101 @@
+ <!-- favicon -->
+<link rel="shortcut icon" href="~/App_Themes/Default/images/new_favicon.ico" type="image/x-icon">
+
+<link href="~/App_Themes/Default/css/kendo.common.min.css" rel="stylesheet" />
+<link href="~/App_Themes/Default/css/kendo.default.min.css" rel="stylesheet" />
+<link href="~/App_Themes/Default/css/fonts.css" rel="stylesheet" />
+<link href="~/App_Themes/Default/css/styleguide.css" rel="stylesheet" />
+<link href="~/App_Themes/Default/css/responsive.css" rel="stylesheet" />
+<link href="~/App_Themes/Default/css/casepoint.comfortable.css" rel="stylesheet" />
+<link href="~/App_Themes/Default/css/kendo.Yellow.css" rel="stylesheet" />
+<link href="~/App_Themes/Default/css/login.css" rel="stylesheet" />
+
+<!-- Additional Scripts -->
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/NewScripts/3.ForgotPassword.js"></script>
+ 
+ <div class="login-bg-wrapper d-flex flex-column">
+     <div class="login-logo-header d-flex align-items-center">
+         <a href="#" class="login-logo-wrapper">
+             <img src="../../Interns_Project_Logo_2024/logo/Trackerflow.png"
+                  class="login-logo-img" alt="Tracker Flow" />
+         </a>
+     </div>
+     <div class="login-graphic-wrapper flex-1 overflow-auto d-flex flex-wrap">
+         <div class="login-left-wrapper">
+             <div>
+                 <img src="~/Interns_Project_Logo_2024/Project images/Tracker (1).png" alt="Tracker Flow"
+                      class="login-graphice-img" />
+             </div>
+         </div>
+         <!-- <form id="ChangePasswordForm"> -->
+         <div class="login-right-wrapper">
+
+             <div class="loginpage-box-wrapper">
+                 <h2 class="login-title text-dark font-bold">Change Password</h2>
+                 <div class="loginpage-box-content">
+                     <input type="hidden" name="Email" value="@ViewBag.EmailId" />
+                     <div class="form-group">
+                         <input type="password" class="k-textbox login-textbox" placeholder="New Password" data-toggle="tooltip"
+                                data-placement="right" title="Use 8 or more characters with a mix of letters, numbers & symbols"
+                                id="loginPassword" name="newpassword" onblur="passwordError()">
+                         <!--ValidationText-->
+                         <h5 id="newpwdCheck" style="color: #ff5a5a;"></h5>
+                         <span class="login-textbox-icon"><i class="icon-locked"></i></span>
+                         <span class="login-textbox-icon"><i toggle="loginPassword" class="icon-locked toggle-password1"></i></span>
+                         <span id="passwordError" class="error k-invalid-msg" data-for="newpassword" role="alert"></span>
+                         <!-- Show/Hide Password-->
+                         <span class="login-textbox-icon" style="margin-left: 390px">
+                             <span class="fa fa-eye-slash icon" id="show_password"></span>
+                         </span>
+                     </div>
+                     <div class="form-group">
+                         <input type="password" class="k-textbox login-textbox" placeholder="Confirm Password" data-toggle="tooltip"
+                                data-placement="right" title="Please Confirm Your Password" id="confirmLoginPassword"
+                                name="confirmLoginPassword" onblur="confirmPasswordError()">
+                         <!--ValidationText-->
+                         <h5 id="cnewpwdCheck" style="color: #ff5a5a;"></h5>
+                         <span class="login-textbox-icon"><i class="icon-locked"></i></span>
+                         <span class="login-textbox-icon"><i toggle="confirmLoginPassword" class="icon-locked toggle-password1"></i></span>
+                         <span id="confirmPasswordError" class="error k-invalid-msg" data-for="confirmLoginPassword" role="alert"></span>
+                     </div>
+
+
+                     <div class="form-group pb-10">
+                         <button class="btn btn-primary k-button w100 loginbtn" id="changepasswordid" onclick="validateData()">Submit</button>
+                     </div>
+
+                 </div>
+             </div>
+         </div>
+     </div>
+ </div>
+
+ @* <!--Notifications-->
+ <!--Success-->
+ <div class="notification-alert  notification-box success" id="msgSuccess">
+     <div class="pull-left"><i class="icon-check" aria-hidden="true"></i></div>
+     <div class="pull-right text-left" role="alert" aria-label="Success">
+         <h5>Successful</h5>
+         <p id="successMessage">Registration Successful.</p>
+     </div>
+     <a onclick="closenav()" class="close btn-red-circle" aria-label="Close Notification" role="button"><i class="icon-cancel" aria-hidden="true"></i></a>
+ </div>
+ <!--Warning-->
+ <div class="notification-alert notification-box warning" id="msgWarning">
+     <div class="pull-left"><i class="icon-warning" aria-hidden="true"></i></div>
+     <div class="pull-right text-left" role="alert" aria-label="warning">
+         <h5>Warning</h5>
+         <p id="warningMessage"></p>
+     </div>
+     <a href="javascript:void(0)" onclick="closenav()" class="close btn-red-circle" aria-label="Close Notification" role="button"><i class="icon-cancel" aria-hidden="true"></i></a>
+ </div>
+ <!--Error-->
+ <div class="notification-alert notification-box danger" id="msgErrorr">
+     <div class="pull-left"><i class="icon-cancel" aria-hidden="true"></i></div>
+     <div class="pull-right" role="alert" aria-label="danger">
+         <h5>Error</h5>
+         <p id="errorMessage"></p>
+     </div>
+     <a href="javascript:void(0)" onclick="closenav()" class="close btn-red-circle" aria-label="Close Notification" role="button"><i class="icon-cancel" aria-hidden="true"></i></a>
+ </div> *@
