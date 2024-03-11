@@ -1,8 +1,156 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+    
+     <!-- Additional Scripts -->
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/NewScripts/1.Registration.js"></script>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+    <!-- Additional CDN for Show/Hide Password -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <link href="~/App_Themes/Default/css/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/App_Themes/Default/css/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/App_Themes/Default/css/fonts.css" rel="stylesheet" />
+    <link href="~/App_Themes/Default/css/styleguide.css" rel="stylesheet" />
+    <link href="~/App_Themes/Default/css/responsive.css" rel="stylesheet" />
+    <link href="~/App_Themes/Default/css/casepoint.comfortable.css" rel="stylesheet" />
+    <link href="~/App_Themes/Default/css/kendo.Yellow.css" rel="stylesheet" />
+    <link href="~/App_Themes/Default/css/login.css" rel="stylesheet" />
+
+
+<div class="login-bg-wrapper d-flex flex-column">
+        <div class="login-logo-header d-flex align-items-center">
+            <a href="#" class="login-logo-wrapper">
+                <img src="~/Interns_Project_Logo_2024/logo/Trackerflow.png"
+                     class="login-logo-img" alt="Tracker Flow"/>
+            </a>
+        </div>
+        <div class="login-graphic-wrapper flex-1 overflow-auto d-flex flex-wrap">
+            <div class="login-left-wrapper">
+                <div>
+                    <img src="~/Interns_Project_Logo_2024/Project images/Tracker (1).png" alt="Tracker Flow"
+                         class="login-graphice-img" />
+                </div>
+            </div>
+            <div class="login-right-wrapper">
+                <div class="loginpage-box-wrapper">
+                    <h2 class="login-title text-dark font-bold">Sign Up</h2>
+                    <div class="loginpage-box-content">
+                        <div class="form-group">
+                            <input type="text" class="k-textbox login-textbox" placeholder="First Name"
+                                   id="registerFname" data-toggle="tooltip" data-placement="right" title="Please Enter Your First Name">
+                            <!-- Validation Text-->
+                            <h5 id="fnameCheck" style="color: #ff5a5a;"></h5>
+                            <span class="login-textbox-icon"><i class="icon-user"></i></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="k-textbox login-textbox" placeholder="Last Name"
+                                   id="registerLname" data-toggle="tooltip" data-placement="right" title="Please Enter Your Last Name">
+                            <!-- Validation Text-->
+                            <h5 id="lnameCheck" style="color: #ff5a5a;"></h5>
+                            <span class="login-textbox-icon"><i class="icon-user"></i></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="k-textbox login-textbox" placeholder="Email"
+                                   id="registerEmail" data-toggle="tooltip" data-placement="right" title="Please Enter Your Email Address">
+                            <!-- Validation Text-->
+                            <h5 id="emailCheck" style="color: #ff5a5a;"></h5>
+                            <span class="login-textbox-icon"><i class="icon-email"></i></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" name="password" class="k-textbox login-textbox" placeholder="Password"
+                                   id="registerpwd" data-toggle="tooltip" data-placement="right"
+                                   title="Use 8 or more characters with a mix of letters, numbers & symbols">
+                            <!-- Validation Text-->
+                            <h5 id="pwdCheck" style="color: #ff5a5a;"></h5>
+                            <span class="login-textbox-icon"><i class="icon-locked"></i></span>
+
+                            <!-- Show/Hide Password-->
+                            <span class="login-textbox-icon" style="margin-left: 390px">
+                                <span class="fa fa-eye-slash icon" id="show_password"></span>
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="k-textbox login-textbox" placeholder="Confirm Password"
+                                   id="registerConfirmpwd" data-toggle="tooltip" data-placement="right" title="Please Confirm Your Password">
+                            <!-- Validation Text-->
+                            <h5 id="cpwdCheck" style="color: #ff5a5a;"></h5>
+                            <span class="login-textbox-icon"><i class="icon-locked"></i></span>
+                        </div>
+                        <div class="login-input-check">
+                            <div class="login-input-checkbox">
+                                <input type='checkbox' class='k-checkbox' checked id='acceptTs'>
+                                <label class='k-checkbox-label' for='acceptTs'>
+                                    <span>I accept the</span><a href="#"
+                                                                aria-label="Terms of use">Terms of Use</a><span> & </span><a href="#"
+                                                                                                                             aria-label="privacy policy">Privacy Policy.<span class="text-danger" aria-hidden="true">*</span></a>
+                                </label>
+                                <!-- Validation Text-->
+                                <h5 id="chkCheck" style="color: #ff5a5a;"></h5>
+                            </div>
+                        </div>
+                        <div class="form-group pb-10">
+                            <button id="suc" class="btn btn-primary k-button w100 loginbtn" onclick="validateData()">Sign Up</button>
+                        </div>
+                        <div class="text-center">
+                            <span class="text-dark font-medium">Have an account with us?</span> <a onclick="loginurl()"
+                                                                                                   aria-label="Login"
+                                                                                                   class="forgot-pwd btn-link-trans font-medium text-dark text-primary">Login here</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/Scripts/Kendo/jquery.min.js"></script>
+    <script src="~/Scripts/Kendo/kendo.all.min.js"></script>
+
+    <script>
+        //Redirection
+        function loginurl() {
+            window.location.href = UI_URL + "/sign/Login";
+        }
+        //user is tabbing
+        function handleFirstTab(e) {
+            document.body.classList.add('user-is-tabbing');
+            document.removeEventListener('keyup', handleFirstTab);
+            document.addEventListener('mousedown', handleMouseDownOnce);
+        }
+
+        function handleMouseDownOnce() {
+            document.body.classList.remove('user-is-tabbing');
+            document.removeEventListener('mousedown', handleMouseDownOnce);
+            document.addEventListener('keyup', handleFirstTab);
+        }
+
+        window.addEventListener('keyup', handleFirstTab);
+
+        // Notification Alert js
+        function closenav() {
+            document.getElementById("msgSuccess").style.display = "none";
+            document.getElementById("msgWarning").style.display = "none";
+            document.getElementById("msgErrorr").style.display = "none";
+        }
+
+        // Password Show/Hide js
+        $(document).ready(function () {
+            $('#show_password').hover(function show() {
+                //Change the attribute to text
+                $('#registerpwd').attr('type', 'text');
+                $('.icon').removeClass('fa fa-eye-slash').addClass('fa fa-eye');
+            },
+                function () {
+                    //Change the attribute back to password
+                    $('#registerpwd').attr('type', 'password');
+                    $('.icon').removeClass('fa fa-eye').addClass('fa fa-eye-slash');
+                });
+            //CheckBox Show Password
+            $('#ShowPassword').click(function () {
+                $('#Password').attr('type', $(this).is(':checked') ? 'text' : 'password');
+            });
+        });
+
+    </script>
