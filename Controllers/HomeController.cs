@@ -17,6 +17,9 @@ public class HomeController : Controller
     {
         return View();
     }
+    public IActionResult TabAsset(){
+        return View();
+    }
 
     public IActionResult Privacy()
     {
