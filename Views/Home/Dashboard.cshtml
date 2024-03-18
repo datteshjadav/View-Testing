@@ -1,0 +1,1028 @@
+@* @using System.Configuration;
+@{
+    var API_URL = System.Configuration.ConfigurationManager.AppSettings["APIBase"];
+    var UI_URL = System.Configuration.ConfigurationManager.AppSettings["UIBase"];
+} *@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--meta tags-->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta http-equiv='cache-control' content='no-cache'>
+    <meta http-equiv='expires' content='0'>
+    <meta http-equiv='pragma' content='no-cache'>
+
+    <title>TrackerFlow | Dashboard</title>
+    <!-- favicon -->
+    <link rel="shortcut icon" href="~/App_Themes/Default/images/new_favicon.ico" type="image/x-icon">
+
+    <link href="~/App_Themes/Default/css/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/App_Themes/Default/css/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/App_Themes/Default/css/fonts.css" rel="stylesheet" />
+    <link href="~/App_Themes/Default/css/styleguide.css" rel="stylesheet" />
+    <link href="~/App_Themes/Default/css/core-pocket-responsive.css" rel="stylesheet" />
+    <link href="~/App_Themes/Default/css/casepoint.comfortable.css" rel="stylesheet" />
+    <link href="~/App_Themes/Default/css/kendo.Deeppurple.css" rel="stylesheet" />
+
+    <!-- css -->
+    @* <link href="~/App_Themes/Default/css/core-pocket.css" rel="stylesheet" /> *@
+
+    <!-- Additional Scripts -->
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/NewScripts/4.Dashboard.js"></script>
+    <script src="~/Scripts/NewScripts/7.Tab_Settings.js"></script>
+
+    <!-- Additional CDN for Show/Hide Password -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- Notification CSS-->
+    <style>
+        #ntfcontainer {
+            position: relative;
+        }
+
+        #ntfdropdown {
+            display: none;
+            width: 300px;
+            position: absolute;
+            top: 30px;
+            left: -262px;
+            background: #FFF;
+            border: solid 1px rgba(100, 100, 100, .20);
+            -webkit-box-shadow: 0 3px 8px rgba(0, 0, 0, .05);
+            z-index: 1;
+        }
+
+            #ntfdropdown:before {
+                content: '';
+                display: block;
+                width: 0;
+                height: 0;
+                color: transparent;
+                border: 10px solid #CCC;
+                border-color: transparent transparent #FFF;
+                margin-top: -20px;
+                margin-left: 260px;
+            }
+
+        .h3border {
+            border-bottom: solid 1px rgba(100, 100, 100, .30);
+        }
+
+        .card {
+            margin: auto;
+            width: 98%;
+            border: none;
+            border-radius: 4px;
+            background-color: #7e57c2;
+        }
+
+        /*.seeAll {
+            background: #F6F7F8;
+            padding: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            border-top: solid 1px rgba(100, 100, 100, .30);
+            text-align: center;
+        }
+
+        .seeAll a {
+            color: #3b5998;
+        }
+
+        .seeAll a:hover {
+            background: #F6F7F8;
+            color: #3b5998;
+            text-decoration: underline;
+        }  */
+    </style>
+
+</head>
+<body>
+    @* <script>
+        var API_URL = "@ConfigurationManager.AppSettings["APIBase"].ToString()";
+        var UI_URL = "@ConfigurationManager.AppSettings["UIBase"].ToString()";
+    </script> *@
+    <!-- BEGIN LOADER -->
+    @* <div id="load_screen" class="load-screen">
+        <div class="pre-loader">
+            <div class="loader-content">
+                <h5 class="text-primary">Tracker Flow</h5>
+                <button>
+                    <div class="spinner-border mr-2 align-self-center loader-sm "></div>
+                    <span>Loading...</span>
+                </button>
+            </div>
+        </div>
+    </div> *@
+    <!--  END LOADER -->
+    <!-- header -->
+    <header class="main-header">
+        <nav class="mt-navbar">
+            <div class="nav-left" id="dvLeftMenu" data-role="aratooltipv2">
+                <div class="logo-wrapper" style="display: flex;">
+                    <img src="~/Interns_Project_Logo_2024/white logos/Group 168.png" alt="Tracker Flow" />
+                </div>
+            </div>
+            <div class="nav-right">
+                <ul class="user-menu">
+                    <!-- Notification UI-->
+                    <li class="notification-item item" id="ntfcontainer">
+                        <a>
+                            <!--SHOW ntfdropdown COUNT-->
+                            <span class="counts" id="ntfcount"></span>
+                            <!--DISPLAY NOTIFICATION DROPDOWN.-->
+                            <span class="icon" id="ntficon"><i class="icon-notification"></i></span>
+                            <!--THE NOTIFICAIONS DROPDOWN BOX.-->
+                            <div id="ntfdropdown">
+                                <h3 class="d-block font-bold fs-18 p-5 text-dark bg-light" id="h3border">Notifications</h3>
+                                <div style="height:300px;">
+                                    <div class="card mt-5 p-3">
+                                        <h6 class="mt-2 mb-0">Audit is Completed</h6>
+                                        <small class="text">April 01,2022</small>
+                                    </div>
+                                    <div class="card mt-5 p-3">
+                                        <h6 class="mt-2 mb-0">Audit is Completed</h6>
+                                        <small class="text">April 08,2022</small>
+                                    </div>
+                                    <div class="card mt-5 p-3">
+                                        <h6 class="mt-2 mb-0">Audit is Completed</h6>
+                                        <small class="text">April 15,2022</small>
+                                    </div>
+                                </div>
+                                @*<div class="seeAll"><a href="#">See All</a></div>*@
+                            </div>
+                        </a>
+                    </li>
+                    <!-- Settings UI-->
+                    <li class="notification-item item">
+                        <a href="javascript:void(0)" class="setting" onclick="openSettingsPopup();">
+                            <span class="icon"><i class="icon-setting"></i></span>
+                        </a>
+                    </li>
+                    <li class="separator"></li>
+                    <li class="userprofile-item userprofile dropdown">
+                        <a href="javascript:void(0)">
+                            @*email1*@
+                            <span class="navuser-ellipse" id="fullname"></span>
+                            <span class="dw-icon"><i class="icon-arrow-down"></i></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <!-- #header -->
+    <!--navigation pages-->
+    <nav class="mt-navbar-pages">
+        <ul class="list-inline pages-menu">
+            <li class="active liactive"><a href="#" title="Dashboard" onclick="dashTab()">Dashboard</a></li>
+            <li class="liactive"><a href="#" title="Assets" onclick="assetTab()">Assets</a></li>
+            <li class="liactive dropdown" role="presentation">
+                <a role="menuitem" tabindex="0" onclick="return false;">Audit<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li role="presentation" class="">
+                        <a role="menuitem" href="#" onclick="auditTab()">Perform Audit</a>
+                        <a role="menuitem" href="#" onclick="emailTab()">Send Report</a>
+                    </li>
+
+                </ul>
+            </li>
+            @*<li class="liactive"><a href="#" title="History" onclick="historyTab()">History</a></li>*@
+        </ul>
+    </nav>
+    <!--#navigation pages-->
+    <!-- user profile -->
+    <div class="userprofile-menu dropdown-menu">
+        <div class="usermenu-wrap">
+            <div class="main-up">
+                <div class="userprofile-content-wrapper">
+                    <div class="brief">
+                        <div class="profileLetterDiv img-circle"><span id="ViewProfile"></span></div>
+                        <div class="ImgDiv img-circle" id="ViewDiv"><img id="ViewProfileImage" /></div>
+
+                    </div>
+                    <div class="a-box">
+                        <a id="settings">
+                            <i class="icon-setting"></i><span class="text-dark text-semibold">Settings</span>
+                        </a>
+                        <a href="/Sign/logout" class="bl-0">
+                            <i class="icon-logout text-danger"></i><span class="text-dark text-semibold">Logout</span>
+                        </a>
+                    </div>
+                    <div class="bottom-block">
+                        <div class="userprofile-info d-flex align-items-center">
+                            <span class="userprofile-info-icon"><i class="icon-user"></i></span>
+                            <div class="flex-1 overflow-hidden font-semi-bold ml-15">
+                                <span class="text-muted d-block ellipsis mb-5">Username</span>
+                                <span class="text-dark d-block ellipsis fs-15" id="uname1"></span>
+                            </div>
+                        </div>
+                        <div class="userprofile-info d-flex align-items-center">
+                            <span class="userprofile-info-icon"><i class="icon-user"></i></span>
+                            <div class="flex-1 overflow-hidden font-semi-bold ml-15">
+                                <span class="text-muted d-block ellipsis mb-5">Full Name</span>
+                                <span class="text-dark d-block ellipsis fs-15" id="fullname1"></span>
+                            </div>
+                        </div>
+                        <div class="userprofile-info d-flex align-items-center">
+                            <span class="userprofile-info-icon"><i class="icon-email"></i></span>
+                            <div class="flex-1 overflow-hidden font-semi-bold ml-15">
+                                <span class="text-muted d-block ellipsis mb-5">Email</span>
+                                <span class="text-dark d-block ellipsis fs-15" id="email2"></span>
+                            </div>
+                        </div>
+                        <div class="userprofile-info d-flex align-items-center">
+                            <span class="userprofile-info-icon"><i class="icon-mobile"></i></span>
+                            <div class="flex-1 overflow-hidden font-semi-bold ml-15">
+                                <span class="text-muted d-block ellipsis mb-5">Phone Number</span>
+                                <span class="text-dark d-block ellipsis fs-15" id="mnumber2"></span>
+                            </div>
+                        </div>
+                        @*<div class="userprofile-info d-flex align-items-center">
+                                <span class="userprofile-info-icon"><i class="icon-assign-role"></i></span>
+                                <div class="flex-1 overflow-hidden font-semi-bold ml-15">
+                                    <span class="text-muted d-block ellipsis mb-5">User Role</span>
+                                    <span class="text-dark d-block ellipsis fs-15">Scrum</span>
+                                </div>
+                            </div>*@
+                    </div>
+                </div>
+            </div>
+            <div class="settings">
+                <div class="head">
+                    <a class="back"><i class="icon-arrow-left"></i></a>
+                    <h3>Settings</h3>
+                </div>
+                <!-- tab strip -->
+                <div id="tabstrip" class="h100">
+                    <ul>
+                        <li class="k-state-active">
+                            Edit Profile
+                        </li>
+                        <li>
+                            Change Password
+                        </li>
+                    </ul>
+                    <div>
+                        <div class="setting-footer">
+                            <a class="btn btn-trans close">Close</a>
+                            <a class="btn btn-trans ml-0" onclick="ResetProfile()">Reset</a>
+                            <a class="btn btn-primary" onclick="validateData()">Update</a>
+                        </div>
+                        <form class="edit-profile" method="post" enctype="multipart/form-data">
+                            <div class="brief">
+                                <div class="profileLetterDiv img-circle" id="LetterDiv"><span id="EditProfile"></span></div>
+                                <div class="ImgDiv img-circle" id="EditDiv"><img id="EditProfileImage" style="display:none;" /></div>
+                                <span class="input-pic">
+                                    <input type="file" id="fileProfileImage" name="fileProfileImage" onchange="SetImage(event);" title="Change Photo" accept="image/*">
+                                    <i class="icon-photo"></i>Change Photo
+                                </span>
+                                <a onclick="ResetPhoto();"><i class="icon-delete"></i>Reset Photo</a>
+                            </div>
+                            <div class="edit-profile-details">
+                                <div class="form-group">
+                                    <label>User Name</label>
+                                    <input class="form-control" readonly type="text" id="uname"
+                                           value="" />
+                                </div>
+                                <div class="form-group">
+                                    <div class="half">
+                                        <label>First Name<span class="text-danger" aria-hidden="true">*</span></label>
+                                        <input class="form-control" type="text" value="" id="fname" />
+                                        <!-- Validation Text-->
+                                        <h5 id="fnameCheck" style="color: #ff5a5a;"></h5>
+                                    </div>
+                                    <div class="half">
+                                        <label>Last Name<span class="text-danger" aria-hidden="true">*</span></label>
+                                        <input class="form-control" type="text" value="" id="lname" />
+                                        <!-- Validation Text-->
+                                        <h5 id="lnameCheck" style="color: #ff5a5a;"></h5>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input class="form-control" type="email" readonly
+                                           value="" id="email" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Phone Number</label>
+                                    <input class="form-control" type="text" value="" id="mnumber" />
+                                    <!-- Validation Text-->
+                                    <h5 id="mnumberCheck" style="color: #ff5a5a;"></h5>
+                                </div>
+                                @*<div class="form-group">
+                                        <label for="drop-list">User Role</label>
+                                        <select id="UserRoleDropdown" title="dropdown without search">
+                                            <option>Scrum</option>
+                                            <option>iAudit</option>
+                                            <option>CorPocket</option>
+                                        </select>
+                                    </div>*@
+                            </div>
+                        </form>
+                    </div>
+                    <div>
+                        <div>
+                            <form class="edit-profile">
+                                <div class="edit-profile-details">
+                                    <div class="form-group">
+                                        <label>Current Password</label>
+                                        <input class="form-control" type="password" placeholder="Current Password" id="curpassword" />
+                                        <!-- Validation Text-->
+                                        <h5 id="oldpwdCheck" style="color: #ff5a5a;"></h5>
+                                        <!-- Show/Hide Password-->
+                                        @*<span class="login-textbox-icon pr pull-right mr-2" style="margin-top: -24px">
+                                                <span class="fa fa-eye-slash icon1 mr-10" id="show_password1"></span>
+                                            </span>*@
+                                    </div>
+                                    <div class="form-group">
+                                        <label>
+                                            New Password <i class="icon-info-unfill text-muted" data-toggle="tooltip" data-placement="right"
+                                                            title="Use 8 or more characters with a mix of letters, numbers & symbols"></i>
+                                        </label>
+                                        <input class="form-control" type="password" placeholder="New Password" id="newpassword" onchange="return validateNewPwd()" />
+                                        <!-- Validation Text-->
+                                        <h5 id="newpwdCheck" style="color: #ff5a5a;"></h5>
+                                        <!-- Show/Hide Password-->
+                                        @*<span class="login-textbox-icon pr pull-right mr-10" style="margin-top: -24px">
+                                                <span class="fa fa-eye-slash icon2" id="show_password2"></span>
+                                            </span>*@
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Confirm Password <i class="icon-info-unfill text-muted" data-toggle="tooltip" data-placement="right" title="Please Confirm Your Password"></i></label>
+                                        <input class="form-control" type="password" placeholder="Re-type New Password" id="conpassword" />
+                                        <!-- Validation Text-->
+                                        <h5 id="cnewpwdCheck" style="color: #ff5a5a;"></h5>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="setting-footer">
+                            <a class="btn btn-trans close">Close</a>
+                            <a class="btn btn-trans ml-0" onclick="ResetPasswdFields()">Reset</a>
+                            <a class="btn btn-primary" onclick="validatePassword()">Save</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end user profile -->
+    <!-- Settings Tab Starts -->
+    <div id="borederTabstrip" class="borderd-tab" style="display: none;">
+        <ul>
+            <li class="k-state-active">
+                Add Office
+            </li>
+            <li>
+                Add Floor
+            </li>
+            <li>
+                Add Area
+            </li>
+            <li>
+                Add Email
+            </li>
+            @*<li>
+                Manage Audit
+            </li>*@
+        </ul>
+        <!-- Add Office -->
+        <div>
+            <div class="form-group">
+                <label for="add_Office" class="pointer-events-none">Office Name<span class="text-danger" aria-hidden="true">*</span></label>
+                <div class="form-group-content">
+                    <input type="text" class="k-textbox" id="add_Office" placeholder="Enter Office Name" aria-label="textbox">
+                    <!-- Validation Text-->
+                    <h5 id="addofficeCheck" style="color: #ff5a5a;"></h5>
+                </div>
+            </div>
+            <button class="btn btn-primary k-button" onclick="validateOffice()">Add</button>
+        </div>
+        <!-- Add Floor -->
+        <div>
+            <div class="form-group">
+                <label for="select_OfficeOne">Select Office<span class="text-danger" aria-hidden="true">*</span></label>
+                <select id="select_OfficeOne" name="search dropdown"></select>
+                <!-- Validation Text-->
+                <h5 id="officeCheck" style="color: #ff5a5a;"></h5>
+                <label for="add_Floor" class="pointer-events-none pt-10">Floor Number<span class="text-danger" aria-hidden="true">*</span></label>
+                <div class="form-group-content">
+                    <input class="form-control" id="add_Floor" type="number" title="numeric" min="0" max="100" step="1">
+                    <!-- Validation Text-->
+                    <h5 id="addfloorCheck" style="color: #ff5a5a;"></h5>
+                </div>
+            </div>
+            <button class="btn btn-primary k-button" onclick="validateFloor()">Add</button>
+        </div>
+        <!-- Add Area -->
+        <div>
+            <div class="form-group">
+                <label for="select_Office">Select Office<span class="text-danger" aria-hidden="true">*</span></label>
+                <select id="select_Office" name="search dropdown"></select>
+                <!-- Validation Text-->
+                <h5 id="officeCheckTwo" style="color: #ff5a5a;"></h5>
+                <label for="select_Floor" class="pt-10">Select Floor<span class="text-danger" aria-hidden="true">*</span></label>
+                <select id="select_Floor" name="search dropdown"></select>
+                <!-- Validation Text-->
+                <h5 id="floorCheck" style="color: #ff5a5a;"></h5>
+                <label for="add_Area" class="pointer-events-none pt-10">Area Name<span class="text-danger" aria-hidden="true">*</span></label>
+                <div class="form-group-content">
+                    <input type="text" class="k-textbox" id="add_Area" placeholder="Enter Area Name" aria-label="textbox">
+                    <!-- Validation Text-->
+                    <h5 id="addareaCheck" style="color: #ff5a5a;"></h5>
+                </div>
+            </div>
+            <button class="btn btn-primary k-button" onclick="validateArea()">Add</button>
+        </div>
+        <!-- Add Email -->
+        <div>
+            <div class="form-group">
+                <label for="add_Email" class="pointer-events-none">Email Address<span class="text-danger" aria-hidden="true">*</span></label>
+                <div class="form-group-content">
+                    <input type="text" class="k-textbox" id="add_Email" placeholder="Enter Email Address" aria-label="textbox">
+                    <!-- Validation Text-->
+                    <h5 id="emailCheck" style="color: #ff5a5a;"></h5>
+                </div>
+            </div>
+            <button class="btn btn-primary k-button" onclick="validateEmail()">Add</button>
+        </div>
+        <!-- Manage Audit -->
+        @*<div>
+            <div class="form-group">
+                <label id="WPpermissionLabel">Select Audit Frequency</label>
+                <ul class="radio-inline" role="radiogroup" aria-labelledby="WPpermissionLabel">
+                    <li>
+                        <input type='radio' class='k-radio' name="radioinline" id="daily">
+                        <label class='k-radio-label' for="daily">Daily</label>
+                    </li>
+                    <li>
+                        <input type='radio' class='k-radio' name="radioinline" id="weekly">
+                        <label class='k-radio-label' for="weekly">Weekly</label>
+                    </li>
+                    <li>
+                        <input type='radio' class='k-radio' name="radioinline" id="monthly">
+                        <label class='k-radio-label' for="monthly">Monthly</label>
+                    </li>
+                </ul>
+            </div>
+            <button class="btn btn-primary k-button" onclick="">Add</button>
+        </div>*@
+    </div>
+    <!-- Settings Tab End -->
+    <!-- main content -->
+    <div class="main-content">
+        <iframe id="myFrame" style="height:100%; width:100%;" tabindex="0" src="@Url.Action("TabDashboard", "Dash")"></iframe>
+    </div>
+    <!-- ##end main content -->
+    <!-- footer -->
+    <footer class="main-footer">
+        <div class="footer-wrap">
+            @*<div class="login-wrap">login time: <span>02-18-2019 15:12:43</span></div>*@
+            @*<div class="version-wrap"><span>casepoint v1.0.0.0</span></div>*@
+        </div>
+    </footer>
+    <!-- footer -->
+    <!--Notifications-->
+    <!--Success-->
+    <div class="notification-alert  notification-box success" id="msgSuccess">
+        <div class="pull-left"><i class="icon-check" aria-hidden="true"></i></div>
+        <div class="pull-right text-left" role="alert" aria-label="Success">
+            <h5>Successful</h5>
+            <p id="successMessage">Registration Successful.</p>
+        </div>
+        <a onclick="closenav()" class="close btn-red-circle" aria-label="Close Notification" role="button"><i class="icon-cancel" aria-hidden="true"></i></a>
+    </div>
+    <!--Warning-->
+    <div class="notification-alert notification-box warning" id="msgWarning">
+        <div class="pull-left"><i class="icon-warning" aria-hidden="true"></i></div>
+        <div class="pull-right text-left" role="alert" aria-label="warning">
+            <h5>Warning</h5>
+            <p id="warningMessage"></p>
+        </div>
+        <a href="javascript:void(0)" onclick="closenav()" class="close btn-red-circle" aria-label="Close Notification" role="button"><i class="icon-cancel" aria-hidden="true"></i></a>
+    </div>
+    <!--Error-->
+    <div class="notification-alert notification-box danger" id="msgErrorr">
+        <div class="pull-left"><i class="icon-cancel" aria-hidden="true"></i></div>
+        <div class="pull-right" role="alert" aria-label="danger">
+            <h5>Error</h5>
+            <p id="errorMessage"></p>
+        </div>
+        <a href="javascript:void(0)" onclick="closenav()" class="close btn-red-circle" aria-label="Close Notification" role="button"><i class="icon-cancel" aria-hidden="true"></i></a>
+    </div>
+
+
+    <script type="text/x-kendo-template" id="thumnail_template">
+        @*<div class="thumbnail-item">
+                <div class="thumbnail-item-wrapper">
+                    <span class="date"></span>
+                    <div class="thumb-img">
+                        <img src='~/App_Themes/Default/images/core-pocket/event.jpg' />
+                    </div>
+                    <div class="thumb-details">
+                        <p class="font-medium text-dark thumb-name">
+                            CP Annual</>
+                            <ul class="thum-list">
+                                <li class="text-muted item-list">
+                                    <span class="icon"><i class="icon-map"></i></span>
+                                    <span class="text"></span>
+                                </li>
+                                <li class="text-muted item-list">
+                                    <span class="icon"><i class="icon-clock"></i></span>
+                                    <span class="text"></span>
+                                </li>
+                            </ul>
+                            <div class="btn-group bt-1 pt-10 text-center">
+                                <a href="javascript:void(0)" class="btn btn-trans text-primary">More Details</a>
+                            </div>
+                    </div>
+                </div>
+            </div>*@
+    </script>
+
+    <!-- scripts -->
+    <script src="~/Scripts/Kendo/jquery.min.js"></script>
+    <script src="~/Scripts/Kendo/kendo.all.min.js"></script>
+    <script src="~/Scripts/CLARENT/Other/Custom/Custom.js"></script>
+
+    <!-- Settings Tab Scripts -->
+    <script>
+        $(document).ready(function () {
+
+            $("#borederTabstrip").kendoTabStrip({
+                animation: {
+                    open: {
+                        effects: "fadeIn"
+                    }
+                }
+            });
+
+        });
+        function openSettingsPopup() {
+            $("#borederTabstrip").data("kendoWindow").center().open();
+        }
+
+        $("#borederTabstrip").kendoWindow({
+            width: '680px',
+            height: '340px',
+            visible: false,
+            draggable: false,
+            resizable: false,
+            title: "Settings",
+            actions: [
+                "Close"
+            ],
+            modal: true,
+            //close: function (e) {
+            //    $(this.element).remove();
+            //}
+        }).data("kendoWindow");
+    </script>
+
+    <!-- Notificatios Scripts -->
+    <script>
+        $(document).ready(function () {
+
+            //ANIMATEDLY DISPLAY THE NOTIFICATION COUNTER.
+            $('#ntfcount')
+                .css({ opacity: 0 })
+                .text('3')
+                .css({ top: '-10px' })
+                .animate({ top: '-2px', opacity: 1 }, 500);
+
+            // TOGGLE (SHOW OR HIDE) NOTIFICATION WINDOW.
+            $('#ntficon').click(function () {
+                $('#ntfdropdown').fadeToggle('fast', 'linear');
+                $('#ntfcount').fadeOut('slow'); // HIDE THE COUNTER.
+                return false;
+            });
+
+            // DO NOTHING WHEN CONTAINER IS CLICKED.
+            $('#ntfdropdown').click(function () {
+                return false;
+            });
+
+            // HIDE ntfdropdown WHEN CLICKED ANYWHERE ON THE PAGE.
+            $(document).click(function () {
+                $('#ntfdropdown').hide();
+            });
+        });
+    </script>
+
+    <script>
+        window.addEventListener("pageshow", function (event) {
+            var historyTraversal = event.persisted ||
+                (typeof window.performance != "undefined" &&
+                    window.performance.navigation.type === 2);
+            if (historyTraversal) {
+                // Handle page restore.
+                window.location.reload();
+            }
+        });
+
+        // Notification Alert js
+        function closenav() {
+            document.getElementById("msgSuccess").style.display = "none";
+            document.getElementById("msgWarning").style.display = "none";
+            document.getElementById("msgErrorr").style.display = "none";
+        }
+
+        // ***************************************
+        // Switching Between Tabs js
+        // ***************************************
+
+        //Switch list class to active on click fuction
+        $(document).ready(function (){
+            $('.liactive').click(function (){
+                $('.liactive').removeClass('active');
+                $(this).addClass('active');
+            });
+        });
+
+        // Password Show/Hide js
+        $(document).ready(function () {
+            $('#show_password1').hover(function show() {
+                //Change the attribute to text
+                $('#curpassword').attr('type', 'text');
+                $('.icon1').removeClass('fa fa-eye-slash').addClass('fa fa-eye');
+            },
+                function () {
+                    //Change the attribute back to password
+                    $('#curpassword').attr('type', 'password');
+                    $('.icon1').removeClass('fa fa-eye').addClass('fa fa-eye-slash');
+                });
+            //CheckBox Show Password
+            $('#ShowPassword').click(function () {
+                $('#Password').attr('type', $(this).is(':checked') ? 'text' : 'password');
+            });
+        });
+
+        // Password Show/Hide js
+        $(document).ready(function () {
+            $('#show_password2').hover(function show() {
+                //Change the attribute to text
+                $('#newpassword').attr('type', 'text');
+                $('.icon2').removeClass('fa fa-eye-slash').addClass('fa fa-eye');
+            },
+                function () {
+                    //Change the attribute back to password
+                    $('#newpassword').attr('type', 'password');
+                    $('.icon2').removeClass('fa fa-eye').addClass('fa fa-eye-slash');
+                });
+            //CheckBox Show Password
+            $('#ShowPassword').click(function () {
+                $('#Password').attr('type', $(this).is(':checked') ? 'text' : 'password');
+            });
+        });
+
+        // Main iframe switch js
+        function dashTab(){
+            document.getElementById("myFrame").src = "@Url.Action("TabDashboard", "Dash")";
+        }
+        function assetTab(){
+            document.getElementById("myFrame").src = "@Url.Action("TabAsset", "Dash")";
+        }
+        function auditTab(){
+            document.getElementById("myFrame").src = "@Url.Action("TabAudit", "Dash")";
+        }
+        function emailTab(){
+            document.getElementById("myFrame").src = "@Url.Action("TabEmail", "Dash")";
+        }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            LoadProfile();
+            setTimeout(function () { $("#load_screen").hide(); }, 30);
+
+            $("select:not([multiple])").kendoDropDownList();
+
+            $("#UserRoleDropdown").kendoDropDownList({
+                popup: {
+                    appendTo: $(".userprofile-menu")
+                }
+            });
+            //Kendo File Upload
+            $("#fileProfileImage").kendoUpload({
+                showFileList: false,
+                multiple: false,
+                localization: { select: 'Select File' }
+            });
+
+            $("#tabstrip").kendoTabStrip({
+                animation: {
+                    open: {
+                        effects: "fadeIn"
+                    }
+                }
+            });
+
+            $("#borederTabstrip").kendoTabStrip({
+                animation: {
+                    open: {
+                        effects: "fadeIn"
+                    }
+                }
+            });
+
+            var dataSource = new kendo.data.DataSource({
+                transport: {
+                    read: {
+                        url: "https://demos.telerik.com/kendo-ui/service/Products",
+                        dataType: "jsonp"
+                    }
+                },
+            });
+
+            $("#thumbnail_grid").kendoListView({
+                dataSource: dataSource,
+                selectable: "multiple",
+                template: kendo.template($("#thumnail_template").html())
+            });
+        });
+        function ResetProfile(){
+            $('#fname').val(""),
+            $('#lname').val(""),
+            $('#mnumber').val("")
+        }
+        function ResetPasswdFields() {
+            $('#curpassword').val(""),
+            $('#newpassword').val(""),
+            $('#conpassword').val("")
+        }
+            function LoadProfile() {
+                var settings = {
+                    "url": API_URL+"/api/Dashboard?id=" + @ViewBag.id,
+                    "method": "GET",
+                    "timeout": 0,
+                };
+                $.ajax(settings).done(function (response) {
+                    $("#fname").val(response.firstname),
+                    $("#lname").val(response.lastname),
+                    $("#email").val(response.email),
+                    $("#uname").val(response.email),
+                    $("#mnumber").val(response.mnumber)
+                    var full = $('#fname').val() + " " + $('#lname').val()
+                    $('#imgpro').removeClass('hideme').text(intials);
+                    $('#imgpro1').removeClass('hideme').text(intials);
+                    $('#email1').text(response.email);
+                    $('#email2').text(response.email);
+                    $('#uname1').text(response.email);
+                    $('#mnumber2').text(response.mnumber);
+                    $('#fullname').text(full);
+                    $('#fullname1').text(full);
+                    if(response.ProfilePhoto==null)
+                    {
+                        var intials = $('#fname').val().charAt(0).toUpperCase() + $('#lname').val().charAt(0).toUpperCase();
+                        $(".ImgDiv").css("display", "none");
+                        $(".profileLetterDiv").css("display", "block");
+                        $('#ViewProfile').removeClass('hideme').text(intials);
+                        $('#EditProfile').removeClass('hideme').text(intials);
+                    }
+                    else
+                    {
+                    //    var profile=data.FirstName[0].toUpperCase()+data.LastName[0].toUpperCase();
+                    //    document.getElementById("ViewProfile").innerHTML=profile;
+                    //    document.getElementById("EditProfile").innerHTML=profile;
+                        $(".profileLetterDiv").css("display", "none");
+                        $(".ImgDiv").css("display", "block");
+                        $("#ViewProfileImage").removeAttr("src").fadeIn("fast").attr('src', API_URL+'/Images/'+response.ProfilePhoto);
+                        $("#EditProfileImage").removeAttr("src").fadeIn("fast").attr('src', API_URL+'/Images/'+response.ProfilePhoto);
+                   }
+                    console.log(response);
+                });
+            }
+            function UpdatePassword() {
+                var passdetails = {
+                    curpassword: $('#curpassword').val(),
+                    newpassword: $('#newpassword').val(),
+                    conpassword: $('#conpassword').val()
+                }
+                console.log(passdetails);
+                var settings = "";
+                settings = {
+                    "url": API_URL+"/api/Dashboard/ChangePasswd?id=" +@ViewBag.id,
+                    "method": "PUT",
+                    "timeout": 0,
+                    "headers": {
+                        "Content-Type": "application/json"
+                    },
+                    "data": JSON.stringify(passdetails),
+                };
+                console.log(settings);
+                $.ajax(settings).done(function (response) {
+                    if (response == true) {
+                        //alert("Successfully Update");
+                        document.getElementById("successMessage").innerHTML = "Password Updated Successfully";
+                        document.getElementById("msgSuccess").style.display = "block";
+                        setTimeout(function () {
+                            $("#msgSuccess").fadeOut(1000)
+                            window.location = UI_URL+"/sign/login";
+                        }, 3000);
+                    }
+                    else {
+                       // alert("Old Password is incorrect");
+                        document.getElementById("warningMessage").innerHTML = "Old Password is incorrect";
+                        document.getElementById("msgWarning").style.display = "block";
+                        setTimeout(function () {
+                            $("#msgWarning").fadeOut(1000)
+                        }, 3000);
+                    }
+                });
+            }
+        function updateProfile() {
+            var Contact = {
+                firstname: $('#fname').val(),
+                lastname: $('#lname').val(),
+                email: $('#email').val(),
+                mnumber: $('#mnumber').val()
+            }
+            console.log(Contact);
+            var settings = "";
+            settings = {
+                "url": API_URL+"/api/Dashboard/UpdateProfile?id="+@ViewBag.id,
+                    "method": "PUT",
+                "timeout": 0,
+                    "headers": {
+                "Content-Type": "application/json"
+            },
+            "data": JSON.stringify(Contact),
+                };
+        console.log(settings);
+        $.ajax(settings).done(function (response) {
+            //alert("Successfully Update");
+            document.getElementById("successMessage").innerHTML = "Profile Updated Successfully";
+            document.getElementById("msgSuccess").style.display = "block";
+            setTimeout(function () {
+                $("#msgSuccess").fadeOut(500)
+                location.reload();
+                AddImage();
+                localStorage.clear();
+            }, 3000);
+        });
+        // if(!(typeof(tempImage)==='undefined'))
+        //{
+        //    AddImage();
+        //    localStorage.clear();
+        //    location.reload();
+        //}
+        }
+
+function AddImage() {
+    var fileUpload = $("#fileProfileImage").get(0);
+    var files = fileUpload.files;
+    var fileData = new FormData();
+    for (var i = 0; i < files.length; i++) {
+        fileData.append(files[i].name, files[i]);
+    }
+    fileData.append(tempImage.name, tempImage);
+      $.ajax({
+        url: API_URL+'/api/Dashboard/AddImage?id='+@ViewBag.id,
+        type: 'POST',
+        data: fileData,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (fileName) {
+        },
+    });
+}
+
+function SetImage()
+{
+    tempImage = event.target.files[0];
+    var filePath=$('#fileProfileImage').val();
+    var tmppath = URL.createObjectURL(event.target.files[0]);
+    $(".profileLetterDiv").css("display", "none");
+    $(".ImgDiv").css("display", "block");
+    $("#EditProfileImage").fadeIn("fast").attr('src',tmppath);
+}
+
+function ResetPhoto()
+{
+    $.ajax({
+        url: API_URL+'/api/Dashboard/DeleteImage?id='+@ViewBag.id,
+        type: 'Delete',
+        data:@ViewBag.id,
+        success: function (data) {
+            $(".ImgDiv").css("display", "none");
+            $(".profileLetterDiv").css("display", "block");
+            $(".ProfileImage").attr('src','');
+            location.reload();
+        },
+    });
+}
+
+        // *******************************************************
+        // Update Profile
+        // *******************************************************
+        function validateData() {
+
+            var valFname = validateFirstName();
+            var valLname = validateLastName();
+            var valPhone = validatePhoneNumber();
+
+            if (valFname && valLname && valPhone) {
+                //alert("Registered Successfully");
+                return updateProfile();
+            }
+        }
+
+        // *******************************************************
+        // Update Password
+        // *******************************************************
+        function validatePassword() {
+            var valOldPwd = validateOldPwd();
+            var valNewpwd = validateNewPwd();
+            var valCNewpwd = validateConfirmNewPwd();
+
+            if (valOldPwd && valNewpwd && valCNewpwd) {
+                return UpdatePassword();
+            }
+        }
+        function check() {
+        var settings = {
+                    "url": API_URL+"/api/Dashboard/check",
+                    "method": "GET",
+                    "timeout": 0,
+                };
+            $.ajax(settings).done(function (response) {
+                alert(response);
+                    console.log(response);
+                });
+        }
+    </script>
+
+    <script>
+        //DropDown
+        $(document).ready(function () {
+
+            $("#select_OfficeOne").kendoDropDownList({
+                dataTextField: "c_ofcname",
+                dataValueField: "c_ofcid",
+                optionLabel: "Select Office",
+                change: onChangeOffice,
+                dataSource: {
+                    transport: {
+                        read: {
+                            dataType: "json",
+                            url: API_URL + "/api/ApiAudit/GetOffice",
+                        }
+                    }
+                }
+            });
+
+            $("#select_Office").kendoDropDownList({
+                dataTextField: "c_ofcname",
+                dataValueField: "c_ofcid",
+                optionLabel: "Select Office",
+                change: onChangeOffice,
+                dataSource: {
+                    transport: {
+                        read: {
+                            dataType: "json",
+                            url: API_URL + "/api/ApiAudit/GetOffice",
+                        }
+                    }
+                }
+            });
+
+            $("#select_Floor").data("kendoDropDownList")
+            function onChangeOffice(e) {
+                e.preventDefault();
+                $("#select_Floor").kendoDropDownList({
+                    //enable: true,
+                    cascadeFrom: "select_Office",
+                    dataTextField: "c_floornum",
+                    dataValueField: "c_floorid",
+                    optionLabel: "Select Floor",
+                    //change: onChangeFloor,
+                    dataSource: {
+                        transport: {
+                            read: {
+                                dataType: "json",
+                                url: API_URL + "/api/ApiAudit/GetFloor/" + $("#select_Office").val(),
+                            }
+                        }
+                    }
+                });
+                var dropdownlist = $("#select_Floor").data("kendoDropDownList")
+                dropdownlist.enable();
+            };
+        });
+    </script>
+
+    @*<script type="text/javascript">
+        if (history.pushState) { //IE10+
+            var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + decodeURIComponent(window.location.search);
+            window.history.pushState({path:newurl},'',newurl);
+        }
+        </script>*@
+</body>
+
+</html>
